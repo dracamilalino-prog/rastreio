@@ -1034,7 +1034,7 @@ function getMedicacoes(){
 function calcular(){
   const nome=g('nome')||'Não informado';
   const nasc=g('nasc')||'Não informado';
-  const alertas=[],atencoes=[],diag={};
+  const alertas=[],atencoes=[],diag={},nuances=[];let resumo="";
 
   // ══ HUMOR ══
 
@@ -1214,7 +1214,7 @@ function calcular(){
   if(diag.arfid) suspeitas.push('ARFID');
   if(diag.substancia) suspeitas.push('Uso de Substâncias');
 
-  let resumo = '';
+  
   if(hipoteses.length) resumo += 'HIPÓTESES DIAGNÓSTICAS PRINCIPAIS\n(rastreio positivo — investigar ativamente)\n' + hipoteses.map(h=>'→ '+h).join('\n');
   if(suspeitas.length) { if(resumo)resumo+='\n\n'; resumo += 'SUSPEITAS / PONTOS A INVESTIGAR\n' + suspeitas.map(s=>'• '+s).join('\n'); }
   if(!hipoteses.length && !suspeitas.length) resumo = 'Sem hipóteses diagnósticas de alto risco identificadas.';
@@ -1366,6 +1366,42 @@ function calcular(){
       return null;
     }
   }
+
+  // Nuances — observações leves mesmo sem diagnóstico grave
+  if(s('dep_atipica')>=2&&!diag.depressao&&!diag.distimia) nuances.push('Reatividade de humor preservada — melhora com eventos positivos. Investigar depressão atípica.');
+  if(s('sono_reduzido')>=2&&!diag.bip1&&!diag.bip2) nuances.push('Sono reduzido com funcionamento preservado — investigar contexto (hipomania leve, TDAH hiperfoco).');
+  if(s('tdpm')>=1) nuances.push('Possível variação ligada ao ciclo menstrual — investigar TDPM.');
+  if(s('hipo_risco')>=1&&!diag.bip1&&!diag.bip2) nuances.push('Algum histórico de decisões impulsivas em fases de energia — investigar padrão.');
+  if(s('ciclotimia')>=1) nuances.push('Oscilações de humor sem episódios claros — avaliar ciclotimia subclínica.');
+  if(s('tag')>=1&&!diag.tag) nuances.push('Preocupação excessiva ocasional — monitorar padrão.');
+  if(s('panico')>=1&&!diag.panico&&!diag.panico_agora) nuances.push('Episódio(s) de ansiedade com sintomas físicos — investigar pânico completo.');
+  if(s('ansiedade_saude')>=1) nuances.push('Alguma preocupação com saúde relatada — monitorar frequência.');
+  if(s('obsessao')>=1||s('compulsao')>=1) nuances.push('Traços obsessivos/compulsivos leves — explorar na entrevista.');
+  if(s('hoarding')>=1) nuances.push('Alguma dificuldade em descartar — investigar grau e impacto.');
+  if(s('bfrb')>=1) nuances.push('Comportamento repetitivo focado no corpo — investigar frequência.');
+  if(s('tei')>=1) nuances.push('Algum episódio de raiva desproporcional — explorar padrão.');
+  if(s('impulso')>=1) nuances.push('Alguma dificuldade com controle de impulsos — investigar.');
+  if(s('ptsd_reexp')>=1||s('ptsd_evit')>=1) nuances.push('Sintomas leves de trauma — explorar impacto residual.');
+  if(s('fam_instavel')>=1) nuances.push('Instabilidade familiar na infância — investigar impacto no apego.');
+  if(s('dissoc')>=1) nuances.push('Experiências dissociativas ocasionais — monitorar frequência.');
+  if((s('desatencao')>=1||s('organizacao')>=1)&&!diag.tdah_comb&&!diag.tdah_des) nuances.push('Alguma dificuldade de atenção — investigar padrão desde a infância.');
+  if((s('tea_rotina')>=1||s('tea_sensorial')>=1||s('tea_mascara')>=1)&&!diag.tea&&!diag.tea_poss) nuances.push('Algumas características do espectro autista leves — investigar relevância clínica.');
+  if((s('ah_aprendizado')>=1||s('ah_conexoes')>=1)&&!diag.ah) nuances.push('Algumas características de altas habilidades — investigar no contexto.');
+  if(s('restricao')>=1&&!diag.anorexia&&!diag.arfid) nuances.push('Alguma restrição alimentar — investigar motivação e impacto.');
+  if(s('compulsao_alim')>=1) nuances.push('Episódios ocasionais de compulsão alimentar — monitorar.');
+  if(s('ortorexia')>=1) nuances.push('Algum controle rígido da qualidade alimentar — investigar impacto.');
+  if(s('sono_geral')>=1||s('insonia_ini')>=1) nuances.push('Dificuldades de sono relatadas — investigar padrão e impacto.');
+  if(s('spi')>=1) nuances.push('Desconforto noturno nas pernas — investigar SPI.');
+  if(s('referencia')>=1&&!diag.psicose) nuances.push('Episódios de sensação de ser observado — monitorar.');
+  if(s('paranoide')>=1) nuances.push('Alguma desconfiança das intenções alheias — avaliar intensidade.');
+  if(s('abandono')>=1||s('idealiz')>=1||s('identidade')>=1) nuances.push('Alguns traços de instabilidade emocional/relacional leves — investigar padrão.');
+  if(s('evitativo')>=1) nuances.push('Alguma evitação social por medo de crítica — investigar intensidade.');
+  if(s('dependente')>=1) nuances.push('Alguma necessidade de aprovação — avaliar padrão de apego.');
+  if(s('tpoc')>=1) nuances.push('Algum perfeccionismo ou rigidez — investigar impacto funcional.');
+  if(s('somatico')>=1) nuances.push('Algum sintoma físico sem causa clara — investigar.');
+  if(s('fadiga')>=1) nuances.push('Cansaço persistente — investigar causas clínicas e psiquiátricas.');
+  if(s('substancia')>=1) nuances.push('Histórico de uso de substâncias — investigar padrão.');
+  if(s('hist_fam')>=1) nuances.push('Histórico familiar psiquiátrico — considerar fator de risco.');
 
   // Monta payload para Google Apps Script
   var secoesDados={};
