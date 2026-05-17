@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questionário de Saúde Mental</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("CalEj6nW0MzNPnr0W");</script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap');
+:root{
+  --bg:#FBF5FF;--surface:#FEFBFF;--ink:#1E1E1E;--muted:#888;--border:#E2DDD8;
+  --accent:#9B5FC0;--accent-light:#EBADFF;
+  --green:#5A7A60;--green-bg:#EDF2EE;
+  --amber:#A07030;--amber-bg:#FBF4E8;
+  --red:#943030;--red-bg:#FAEAEA;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Jost',sans-serif;color:var(--ink);padding:0 0 80px;}
+.hero{background:#6B3FA0;color:white;padding:48px 24px 40px;text-align:center;}
+.hero-tag{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--accent-light);margin-bottom:16px;display:block;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:300;font-style:italic;line-height:1.2;margin-bottom:14px;}
+.hero p{font-size:13px;color:#AAA;line-height:1.7;max-width:500px;margin:0 auto;font-weight:300;}
+.id-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:20px 24px;}
+.id-grid{max-width:640px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.id-field label{display:block;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.id-field input{width:100%;border:1.5px solid var(--border);border-radius:6px;padding:9px 13px;font-family:'Jost',sans-serif;font-size:13px;background:var(--bg);color:var(--ink);outline:none;transition:border-color .2s;}
+.id-field input:focus{border-color:#9B5FC0;}
+.progress-wrap{max-width:640px;margin:0 auto;padding:20px 24px 0;}
+.progress-bar-bg{height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:#9B5FC0;border-radius:2px;transition:width .4s ease;width:0%;}
+.progress-label{font-size:11px;color:var(--muted);margin-top:6px;text-align:right;}
+.container{max-width:640px;margin:0 auto;padding:32px 24px;}
+.section{margin-bottom:44px;opacity:0;transform:translateY(14px);animation:fadeUp .5s forwards;}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0);}}
+.section:nth-child(1){animation-delay:.04s}.section:nth-child(2){animation-delay:.08s}
+.section:nth-child(3){animation-delay:.12s}.section:nth-child(4){animation-delay:.16s}
+.section:nth-child(5){animation-delay:.20s}.section:nth-child(6){animation-delay:.24s}
+.section:nth-child(7){animation-delay:.28s}.section:nth-child(8){animation-delay:.32s}
+.section:nth-child(9){animation-delay:.36s}.section:nth-child(10){animation-delay:.40s}
+.section:nth-child(11){animation-delay:.44s}.section:nth-child(12){animation-delay:.48s}
+.sec-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:12px;border-bottom:2px solid #EBADFF;}
+.sec-icon{width:30px;height:30px;border-radius:50%;background:#6B3FA0;color:white;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:#6B3FA0;}
+.sec-hint{font-size:11px;color:var(--muted);margin-left:auto;font-style:italic;}
+.qcard{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin-bottom:10px;transition:border-color .2s;}
+.qcard:hover{border-color:var(--accent-light);}
+.qcard.flagged{border-left:3px solid var(--red);}
+.qtext{font-size:13.5px;line-height:1.65;margin-bottom:12px;color:var(--ink);}
+.opts{display:flex;gap:8px;flex-wrap:wrap;}
+.opt{flex:1;min-width:75px;padding:8px 10px;border:1.5px solid var(--border);border-radius:7px;background:var(--bg);font-family:'Jost',sans-serif;font-size:12.5px;cursor:pointer;transition:all .15s;color:var(--ink);text-align:center;line-height:1.3;}
+.opt:hover{border-color:#9B5FC0;background:#F5EDFF;}
+.opt.s-sim{background:#6B3FA0;border-color:#6B3FA0;color:white;}
+.opt.s-nao{background:var(--green);border-color:var(--green);color:white;}
+.opt.s-as{background:var(--amber);border-color:var(--amber);color:white;}
+.open-txt{width:100%;border:1.5px solid var(--border);border-radius:8px;padding:10px 13px;font-family:'Jost',sans-serif;font-size:13px;background:var(--bg);color:var(--ink);resize:vertical;min-height:60px;outline:none;transition:border-color .2s;margin-top:10px;}
+.open-txt:focus{border-color:#9B5FC0;}
+.open-label{font-size:11px;color:var(--muted);margin-top:10px;display:block;font-style:italic;}
+.med-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-bottom:8px;}
+.med-input{border:1.5px solid var(--border);border-radius:6px;padding:8px 11px;font-family:'Jost',sans-serif;font-size:12.5px;background:var(--bg);color:var(--ink);outline:none;transition:border-color .2s;width:100%;}
+.med-input:focus{border-color:#9B5FC0;}
+.btn-add-med{background:none;border:1.5px dashed var(--border);border-radius:7px;padding:8px 16px;font-family:'Jost',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;margin-top:4px;transition:all .15s;width:100%;}
+.btn-add-med:hover{border-color:#9B5FC0;color:#9B5FC0;}
+.submit-area{text-align:center;padding-top:20px;border-top:1px solid var(--border);}
+.btn-submit{background:#6B3FA0;color:white;border:none;border-radius:30px;padding:14px 52px;font-family:'Jost',sans-serif;font-size:14px;font-weight:500;cursor:pointer;letter-spacing:.5px;transition:background .2s,transform .15s;}
+.btn-submit:hover{background:#9B5FC0;transform:translateY(-1px);}
+#send-status{margin-top:12px;font-size:12px;color:var(--muted);display:none;}
+#resultado{display:none;margin-top:32px;border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+#resultado.show{display:block;}
+.res-top{padding:24px 26px;color:white;background:var(--green);border-radius:12px;}
+.res-top h2{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:6px;}
+.res-top p{font-size:12.5px;opacity:.88;line-height:1.5;}
+.footer{text-align:center;font-size:11px;color:var(--muted);margin-top:40px;line-height:1.8;}
+
+@media print {
+  .hero { background: #1E1E1E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 24px; }
+  .progress-wrap, .submit-area, #send-status, #resultado, button:not(.opt) { display: none !important; }
+  .section { opacity: 1 !important; transform: none !important; animation: none !important; break-inside: avoid; }
+  .qcard { break-inside: avoid; border: 1px solid #ccc !important; margin-bottom: 8px; }
+  .opts { flex-wrap: nowrap; }
+  .opt { border: 1.5px solid #ccc !important; background: white !important; color: #1E1E1E !important; padding: 6px 8px; font-size: 11px; }
+  .opt.s-sim, .opt.s-nao, .opt.s-as { background: white !important; color: #1E1E1E !important; }
+  .open-txt { border: 1px solid #ccc !important; min-height: 40px; background: white !important; }
+  .med-input { border: 1px solid #ccc !important; background: white !important; }
+  body { background: white !important; font-size: 12px; }
+  .container { padding: 16px; }
+  .id-bar { border: 1px solid #ccc; margin-bottom: 16px; }
+  .footer { margin-top: 16px; }
+  .btn-add-med { display: none !important; }
+}
+
+@media print {
+  .hero { background: #1E1E1E !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .btn-submit, #send-status, #resultado, .progress-wrap { display: none !important; }
+  .opts { display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .opt { border: 1px solid #ccc !important; background: white !important; color: #1E1E1E !important; padding: 6px 8px; font-size: 11px; border-radius: 5px; }
+  .opt::before { content: '○  '; }
+  .section { opacity: 1 !important; transform: none !important; animation: none !important; page-break-inside: avoid; }
+  .qcard { page-break-inside: avoid; border: 1px solid #ddd; margin-bottom: 8px; }
+  .open-txt { border: 1px solid #ccc; min-height: 40px; background: white; }
+  body { padding: 0; background: white; }
+  .container { padding: 16px; }
+  .id-bar { border: 1px solid #ddd; }
+  .med-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 6px; }
+  .med-input { border: 1px solid #ccc; background: white; }
+  .btn-add-med { display: none; }
+  .footer { margin-top: 20px; }
+  h1 { font-size: 24px !important; }
+}
+</style>
+</head>
+<body>
+<div class="hero">
+  <span class="hero-tag">Psiquiatria · Avaliação Inicial</span>
+  <h1>Como você tem sido ao longo da vida?</h1>
+  <p>Responda com base na sua experiência real. Não existe resposta certa ou errada — apenas a sua verdade. Suas respostas chegam diretamente para sua médica.</p>
+</div>
+<div class="id-bar">
+  <div class="id-grid">
+    <div class="id-field"><label>Nome completo</label><input type="text" id="nome" placeholder="Seu nome"></div>
+    <div class="id-field"><label>Data de nascimento</label><input type="text" id="nasc" placeholder="DD/MM/AAAA"></div>
+  </div>
+</div>
+  <div style="text-align:center;padding:16px 24px 0;">
+    <button onclick="window.print()" style="background:none;border:1.5px solid var(--border);border-radius:20px;padding:8px 24px;font-family:'Jost',sans-serif;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">⎙ Imprimir questionário</button>
+  </div>
+<div class="progress-wrap">
+  <div class="progress-bar-bg"><div class="progress-bar-fill" id="prog"></div></div>
+  <div class="progress-label" id="prog-label">0 respondidas</div>
+</div>
+<div class="container">
+
+<!-- 1. HUMOR -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">◑</div><span class="sec-title">Humor e energia</span><span class="sec-hint">ao longo da vida</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Já passou por semanas ou meses com tristeza profunda, sem energia, sem vontade de fazer nada — mesmo coisas que antes gostava?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'dep_epis','Sim, semanas ou meses',2)">Sim, semanas ou meses</button>
+      <button class="opt" onclick="r(this,'dep_epis','Brevemente',1)">Brevemente</button>
+      <button class="opt" onclick="r(this,'dep_epis','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Esse período de tristeza — veio e passou em algum momento, ou você sente que é assim há anos, como se fosse parte de como você é — mesmo que seja uma tristeza mais baixa, não tão intensa?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'dep_duracao','Episódios claros com melhora entre eles',0)">Episódios com melhora</button>
+      <button class="opt" onclick="r(this,'dep_duracao','Humor baixo crônico há anos, quase sempre',2)">É assim há anos, quase o tempo todo</button>
+      <button class="opt" onclick="r(this,'dep_duracao','Não tive isso',0)">Não tive</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já perdeu interesse ou prazer em atividades que antes gostava — por semanas ou meses?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'anedonia','Sim, semanas ou meses',2)">Sim, semanas ou meses</button>
+      <button class="opt" onclick="r(this,'anedonia','Às vezes, brevemente',1)">Brevemente</button>
+      <button class="opt" onclick="r(this,'anedonia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve fases de vários dias em que você estava muito mais produtivo(a) que o habitual — com muitos projetos, dormindo menos, mas sem sentir falta do sono?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hipo_prod','Sim, por dias ou semanas',2)">Sim, dias ou semanas</button>
+      <button class="opt" onclick="r(this,'hipo_prod','Por horas no máximo',1)">Por horas</button>
+      <button class="opt" onclick="r(this,'hipo_prod','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Nessas fases de pouco sono e muita energia — você sentia que não precisava dormir, quase como se fosse agradável? Ou tentava dormir mas não conseguia?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'sono_qual','Não precisava — era quase agradável',2)">Não precisava — o corpo simplesmente não pedia sono</button>
+      <button class="opt" onclick="r(this,'sono_qual','Tentava mas não conseguia',0)">Tentava dormir mas não conseguia</button>
+      <button class="opt" onclick="r(this,'sono_qual','Não tive essas fases',0)">Não tive</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Essa fase de alta produtividade era claramente diferente de como você é normalmente — as pessoas ao redor notavam que você estava diferente?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hipo_obs','Sim, claramente diferente do meu basal',2)">Sim, era claramente diferente do que sou normalmente</button>
+      <button class="opt" onclick="r(this,'hipo_obs','Um pouco diferente',1)">Um pouco diferente, mas nada muito fora do comum</button>
+      <button class="opt" onclick="r(this,'hipo_obs','Não, sou sempre assim',0)">Não — sou sempre assim, não foi uma fase diferente</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Nessas fases, você se sentiu invencível — com a certeza de que conseguia fazer qualquer coisa, que era especial ou diferente dos outros — e isso resultou em algo sério como dívidas, perda de emprego ou relacionamentos destruídos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'mania_grave','Sim, com consequências sérias',3)">Sim, com consequências sérias</button>
+      <button class="opt" onclick="r(this,'mania_grave','Senti grandiosidade mas sem grandes consequências',2)">Me senti especial/invencível, mas sem grandes consequências</button>
+      <button class="opt" onclick="r(this,'mania_grave','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve períodos em que se sentiu muito mais confiante e disposto(a) a correr riscos — gastos impulsivos, decisões precipitadas — que depois pareceram exageradas?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hipo_risco','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'hipo_risco','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'hipo_risco','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Depois dessas fases de muito rendimento, veio uma queda brusca — dias sem conseguir fazer nada, como se tivesse esgotado a bateria?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hipo_crash','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'hipo_crash','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'hipo_crash','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você tem altos e baixos de humor frequentes ao longo dos anos — mas nunca uma fase claramente fora do seu padrão, são mais como oscilações constantes que fazem parte de como você é?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ciclotimia','Sim, oscilações crônicas mas nunca episódios claros',2)">Sim, oscilações crônicas</button>
+      <button class="opt" onclick="r(this,'ciclotimia','Tenho episódios mais definidos',0)">Tenho fases claramente diferentes do normal</button>
+      <button class="opt" onclick="r(this,'ciclotimia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Há períodos em que fica visivelmente mais irritado(a) — uma irritabilidade que queima por dentro, difícil de explicar às pessoas ao redor — diferente do seu estado habitual?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'irritab','Sim, claramente diferente do meu basal',2)">Sim, claramente diferente do que sou normalmente</button>
+      <button class="opt" onclick="r(this,'irritab','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'irritab','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Se você é mulher — seus sintomas de humor, irritabilidade ou ansiedade pioram visivelmente nos dias antes da menstruação e melhoram logo depois?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tdpm','Sim, muito claramente',2)">Sim, muito claramente</button>
+      <button class="opt" onclick="r(this,'tdpm','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'tdpm','Não / não se aplica',0)">Não / não se aplica</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Quando algo bom acontece — uma notícia positiva, um encontro agradável — seu humor melhora imediatamente, mesmo estando em um período ruim?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'dep_atipica','Sim, melhoro rapidamente com coisas boas',2)">Sim — quando algo bom acontece, melhoro logo</button>
+      <button class="opt" onclick="r(this,'dep_atipica','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'dep_atipica','Não, continuo para baixo mesmo com coisas boas',0)">Não — mesmo com coisas boas, continuo me sentindo mal</button>
+    </div>
+  </div>
+
+  <span class="open-label">Quer contar algo sobre seu humor ou energia?</span>
+  <textarea class="open-txt" id="obs_humor" placeholder="Opcional..."></textarea>
+</div>
+
+<!-- 2. ANSIEDADE -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">∿</div><span class="sec-title">Ansiedade e preocupações</span><span class="sec-hint">tipos e intensidade</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Você se preocupa excessivamente com várias coisas ao mesmo tempo — saúde, família, trabalho, dinheiro — de forma difícil de controlar, quase todo dia?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tag','Sim, quase todo dia',2)">Sim, quase todo dia</button>
+      <button class="opt" onclick="r(this,'tag','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'tag','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve crises repentinas com coração acelerado, falta de ar, tontura ou sensação de que ia morrer — sem causa física — que passaram em minutos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'panico','Sim, várias vezes',2)">Sim, várias vezes</button>
+      <button class="opt" onclick="r(this,'panico','Uma ou duas vezes',1)">Uma ou duas vezes</button>
+      <button class="opt" onclick="r(this,'panico','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Depois dessas crises, você passou a evitar lugares ou situações por medo de que voltassem — metrô, shoppings, lugares cheios ou abertos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'agorafobia','Sim, evito vários lugares',2)">Sim, passei a evitar vários lugares por causa disso</button>
+      <button class="opt" onclick="r(this,'agorafobia','Fico desconfortável mas vou',1)">Fico desconfortável, mas ainda consigo ir</button>
+      <button class="opt" onclick="r(this,'agorafobia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Situações sociais — falar em público, conhecer pessoas, ser observado(a) — causam ansiedade intensa que te leva a evitar essas situações?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'fobia_soc','Sim, evito por isso',2)">Sim, evito por isso</button>
+      <button class="opt" onclick="r(this,'fobia_soc','Fico ansioso(a) mas vou',1)">Fico ansioso(a), mas ainda consigo ir</button>
+      <button class="opt" onclick="r(this,'fobia_soc','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Tem algum medo muito específico e intenso — de altura, agulhas, animais, sangue, trovoada — que te leva a evitar ativamente essa situação?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'fobia_esp','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'fobia_esp','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'fobia_esp','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Costuma se preocupar muito com ter uma doença grave — mesmo depois de exames normais ou do médico dizer que está bem?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ansiedade_saude','Sim, com frequência',2)">Sim, com frequência</button>
+      <button class="opt" onclick="r(this,'ansiedade_saude','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'ansiedade_saude','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Costuma sentir o corpo tenso — ombros rígidos, mandíbula travada, dificuldade de relaxar mesmo quando está descansando?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tensao','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'tensao','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'tensao','Raramente',0)">Raramente</button>
+    </div>
+  </div>
+</div>
+
+<!-- 3. TOC / IMPULSOS -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">↺</div><span class="sec-title">Pensamentos repetitivos e comportamentos</span><span class="sec-hint">padrões difíceis de controlar</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Tem pensamentos que voltam repetidamente mesmo quando tenta ignorá-los — perturbadores, que causam desconforto?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'obsessao','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'obsessao','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'obsessao','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Sente necessidade de repetir ações, verificar coisas várias vezes ou seguir rituais para se sentir aliviado(a) — mesmo sabendo que é excessivo?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'compulsao','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'compulsao','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'compulsao','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você acumula objetos com dificuldade de descartar — mesmo coisas sem valor — e isso já causou problema em casa ou nos relacionamentos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hoarding','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'hoarding','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'hoarding','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já puxou compulsivamente seus próprios cabelos, sobrancelhas ou cílios — ou coçou/beliscou a pele de forma repetitiva, difícil de parar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'bfrb','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'bfrb','Raramente',1)">Raramente</button>
+      <button class="opt" onclick="r(this,'bfrb','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve períodos de raiva explosiva — desproporcionais ao que aconteceu — que surgem do nada e passam rápido, deixando você surpreso(a) com a própria reação?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tei','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'tei','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'tei','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já perdeu controle sobre comportamentos como compras, uso de internet/jogos, sexo ou apostas — de um jeito que trouxe consequências concretas na sua vida?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'impulso','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'impulso','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'impulso','Não',0)">Não</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. TRAUMA / DISSOCIAÇÃO -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">◈</div><span class="sec-title">Experiências difíceis e memória</span><span class="sec-hint">sem julgamento</span></div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Já viveu algo muito assustador ou violento que ainda hoje aparece em memórias vívidas, pesadelos ou sensações físicas — como se estivesse revivendo?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ptsd_reexp','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'ptsd_reexp','Às vezes / vagamente',1)">Às vezes / vagamente</button>
+      <button class="opt" onclick="r(this,'ptsd_reexp','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você evita lugares, pessoas ou assuntos que lembram essas experiências — e fica sempre na defensiva, como se algo ruim pudesse acontecer, mesmo quando está num lugar tranquilo?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ptsd_evit','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'ptsd_evit','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'ptsd_evit','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Na infância ou adolescência, você sofreu abuso físico, emocional ou sexual, ou viveu situação de negligência grave?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'trauma_abuso','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'trauma_abuso','Prefiro não responder',1)">Prefiro não responder</button>
+      <button class="opt" onclick="r(this,'trauma_abuso','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">A estrutura familiar na sua infância era muito instável — brigas constantes, separações difíceis, figura parental ausente ou emocionalmente imprevisível?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'fam_instavel','Sim, muito',2)">Sim, muito</button>
+      <button class="opt" onclick="r(this,'fam_instavel','Havia instabilidade, mas manejável',1)">Havia instabilidade, mas dava para lidar</button>
+      <button class="opt" onclick="r(this,'fam_instavel','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve a sensação estranha de estar se vendo de fora — como se fosse um espectador da sua própria vida — ou sentiu que as coisas ao redor pareciam artificiais, distantes ou como num sonho?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'dissoc','Sim, com frequência',2)">Sim, com frequência</button>
+      <button class="opt" onclick="r(this,'dissoc','Uma ou duas vezes',1)">Uma ou duas vezes</button>
+      <button class="opt" onclick="r(this,'dissoc','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já "perdeu" períodos de tempo — acordar sem saber o que fez nas últimas horas — ou encontrou objetos, mensagens ou situações sem se lembrar de ter feito?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'amnesia_dis','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'amnesia_dis','Raramente',1)">Raramente</button>
+      <button class="opt" onclick="r(this,'amnesia_dis','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já passou por uma mudança de vida significativa — perda, separação, mudança de cidade, diagnóstico — e ficou muito tempo sem conseguir se adaptar ou funcionar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ajuste','Sim',1)">Sim</button>
+      <button class="opt" onclick="r(this,'ajuste','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'ajuste','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <span class="open-label">Quer contar algo sobre essas experiências?</span>
+  <textarea class="open-txt" id="obs_trauma" placeholder="Apenas o que você quiser compartilhar..."></textarea>
+</div>
+
+<!-- 5. ATENÇÃO / NEURODESENV -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">⇄</div><span class="sec-title">Atenção, organização e aprendizado</span><span class="sec-hint">desde quando isso acontece</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Com que frequência você deixa tarefas pela metade — não por falta de vontade, mas porque sua atenção foi para outra coisa?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'desatencao','Quase sempre, desde sempre',2)">Com muita frequência — e sempre foi assim</button>
+      <button class="opt" onclick="r(this,'desatencao','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'desatencao','Raramente',0)">Raramente</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você costuma perder objetos, esquecer compromissos ou chegar atrasado(a) com frequência — de forma que já trouxe problemas concretos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'organizacao','Sim, com frequência',2)">Sim, com frequência</button>
+      <button class="opt" onclick="r(this,'organizacao','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'organizacao','Raramente',0)">Raramente</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Tem dificuldade de ficar parado(a) — uma inquietação interna, necessidade de se mover ou de estar sempre fazendo algo?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hiperativ','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'hiperativ','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'hiperativ','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Essas dificuldades com atenção e organização existem desde criança — não começaram só depois de algum estresse recente?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tdah_inicio','Sim, desde criança',2)">Sim, desde criança</button>
+      <button class="opt" onclick="r(this,'tdah_inicio','Piorou na vida adulta',1)">Piorou na vida adulta</button>
+      <button class="opt" onclick="r(this,'tdah_inicio','Surgiram recentemente',0)">Surgiram recentemente</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Na infância ou adolescência, você aprendia coisas muito mais rápido que a maioria dos colegas — e se entediava na escola por isso?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ah_aprendizado','Sim, claramente',2)">Sim, claramente</button>
+      <button class="opt" onclick="r(this,'ah_aprendizado','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'ah_aprendizado','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você costuma perceber conexões entre assuntos completamente diferentes — de um jeito que surpreende ou confunde as pessoas ao redor?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ah_conexoes','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'ah_conexoes','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'ah_conexoes','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Tarefas repetitivas te cansam rapidamente — você perde o interesse assim que domina algo e precisa de novidade ou desafio constante?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ah_tedio','Sim, muito',2)">Sim, muito</button>
+      <button class="opt" onclick="r(this,'ah_tedio','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'ah_tedio','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você questiona regras com frequência — não por rebeldia, mas porque genuinamente não entende a lógica por trás delas?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ah_autoridade','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'ah_autoridade','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'ah_autoridade','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Em situações sociais, você já se pegou observando como as outras pessoas agem para entender como você mesmo(a) deveria se comportar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tea_mascara','Sim, faço isso',2)">Sim, faço isso</button>
+      <button class="opt" onclick="r(this,'tea_mascara','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'tea_mascara','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Depois de ficar com pessoas — mesmo com quem você gosta — você costuma se sentir muito cansado(a) e precisar de tempo sozinho(a) para se recuperar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tea_cansaco','Sim, sempre ou quase sempre',2)">Sim, sempre ou quase sempre</button>
+      <button class="opt" onclick="r(this,'tea_cansaco','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'tea_cansaco','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Prefere que as coisas sejam previsíveis — horários, planos, rotinas — e fica muito incomodado(a) quando algo muda sem aviso?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tea_rotina','Sim, muito',2)">Sim, muito</button>
+      <button class="opt" onclick="r(this,'tea_rotina','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'tea_rotina','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Sons, luzes, cheiros ou texturas te incomodam de forma intensa — mais do que parecem incomodar as outras pessoas?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tea_sensorial','Sim, muito',2)">Sim, muito</button>
+      <button class="opt" onclick="r(this,'tea_sensorial','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'tea_sensorial','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Ao longo da vida, você se sentiu diferente das pessoas da sua idade — como se não pertencesse ao grupo, mesmo sem querer se afastar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ah_pares','Sim, sempre',2)">Sim, sempre</button>
+      <button class="opt" onclick="r(this,'ah_pares','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'ah_pares','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você tem assuntos ou interesses pelos quais se apaixona de forma muito intensa — estudando, pesquisando ou pensando nisso o tempo todo — de um jeito que outras pessoas acham exagerado?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tea_interesse','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'tea_interesse','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'tea_interesse','Não',0)">Não</button>
+    </div>
+  </div>
+</div>
+
+<!-- 6. ALIMENTAÇÃO -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">◇</div><span class="sec-title">Alimentação e corpo</span><span class="sec-hint">relação com comida e imagem</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Já restringiu muito o que come — de forma que afetou sua saúde ou seu peso?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'restricao','Sim, atualmente',2)">Sim, atualmente</button>
+      <button class="opt" onclick="r(this,'restricao','Já tive, não mais',2)">Já tive, não mais</button>
+      <button class="opt" onclick="r(this,'restricao','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Essa restrição está ligada a — medo de engordar ou de como você aparece no espelho — ou mais a textura, cheiro, gosto ou rotina dos alimentos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'restricao_motivo','Medo de engordar / imagem corporal',2)">Medo de engordar / imagem</button>
+      <button class="opt" onclick="r(this,'restricao_motivo','Textura, cheiro, rotina ou sensação',1)">Textura, cheiro, rotina</button>
+      <button class="opt" onclick="r(this,'restricao_motivo','Não me restrinjo',0)">Não me restrinjo</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve episódios de comer muito em pouco tempo — seguidos de vômito, laxantes ou exercício excessivo para compensar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'bulimia','Sim, atualmente',2)">Sim, atualmente</button>
+      <button class="opt" onclick="r(this,'bulimia','Já tive, não mais',2)">Já tive, não mais</button>
+      <button class="opt" onclick="r(this,'bulimia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve episódios de comer muito em pouco tempo sentindo perda de controle — sem compensação depois, mas com muita culpa ou sofrimento?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'compulsao_alim','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'compulsao_alim','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'compulsao_alim','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você tem regras muito rígidas sobre o que pode ou não comer — só alimentos considerados saudáveis — a ponto de recusar jantares, eventos ou coisas que outras pessoas comem sem pensar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ortorexia','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'ortorexia','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'ortorexia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <span class="open-label">Quer contar algo sobre sua relação com alimentação ou corpo?</span>
+  <textarea class="open-txt" id="obs_alim" placeholder="Opcional..."></textarea>
+</div>
+
+<!-- 7. SONO -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">☽</div><span class="sec-title">Sono e descanso</span><span class="sec-hint">padrões ao longo da vida</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Como é seu sono de forma geral?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'sono_geral','Bem na maioria das noites',0)">Bem na maioria das noites</button>
+      <button class="opt" onclick="r(this,'sono_geral','Com dificuldade frequente',1)">Com dificuldade frequente</button>
+      <button class="opt" onclick="r(this,'sono_geral','Muito mal',2)">Muito mal</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Tem dificuldade para pegar no sono — mente acelerada, pensamentos que não param quando deita?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'insonia_ini','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'insonia_ini','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'insonia_ini','Raramente',0)">Raramente</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já passou por períodos de vários dias dormindo menos de 5 horas — mas ainda assim dava conta de tudo ou até se sentia com energia?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'sono_reduzido','Sim, várias vezes',2)">Sim, várias vezes</button>
+      <button class="opt" onclick="r(this,'sono_reduzido','Uma ou duas vezes',1)">Uma ou duas vezes</button>
+      <button class="opt" onclick="r(this,'sono_reduzido','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve períodos dormindo muito mais que o habitual — mais de 10 horas — com dificuldade de sair da cama, mesmo após horas de sono ainda se sentindo cansado(a)?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hipersonia','Sim',1)">Sim</button>
+      <button class="opt" onclick="r(this,'hipersonia','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'hipersonia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Sente um desconforto ou agitação nas pernas à noite — uma vontade difícil de controlar de se mexer — que piora quando você deita e atrapalha o sono?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'spi','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'spi','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'spi','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <span class="open-label">Quer contar algo sobre seu sono?</span>
+  <textarea class="open-txt" id="obs_sono" placeholder="Opcional..."></textarea>
+</div>
+
+<!-- 8. PERCEPÇÃO / PSICOSE -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">◉</div><span class="sec-title">Percepções e experiências incomuns</span><span class="sec-hint">sem julgamento</span></div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Já ouviu sons ou vozes que outras pessoas disseram não ouvir — ou viu coisas que outros não viram — fora de sonhos?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'alucinacao','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'alucinacao','Não tenho certeza',1)">Não tenho certeza</button>
+      <button class="opt" onclick="r(this,'alucinacao','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve a sensação de que pessoas ao redor estavam falando sobre você ou te observando de um jeito especial — sem ter certeza se era real?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'referencia','Sim, com frequência',2)">Sim, com frequência</button>
+      <button class="opt" onclick="r(this,'referencia','Uma ou duas vezes',1)">Uma ou duas vezes</button>
+      <button class="opt" onclick="r(this,'referencia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve experiências que não são parte da sua religião ou espiritualidade — como ver, ouvir ou sentir coisas que outras pessoas disseram não existir — e que elas acharam muito difíceis de entender ou acreditar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'esquizotipico','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'esquizotipico','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'esquizotipico','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você tende a desconfiar muito das intenções das pessoas — mesmo sem motivo claro — e sente frequentemente que outros podem querer te prejudicar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'paranoide','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'paranoide','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'paranoide','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <span class="open-label">Quer descrever alguma dessas experiências?</span>
+  <textarea class="open-txt" id="obs_percepcao" placeholder="Opcional — sem julgamento..."></textarea>
+</div>
+
+<!-- 9. RELACIONAMENTOS / PERSONALIDADE -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">⬡</div><span class="sec-title">Relacionamentos e forma de ser</span><span class="sec-hint">padrões que se repetem ao longo da vida</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Já fez coisas extremas para evitar que alguém importante fosse embora ou te deixasse — mesmo quando não havia motivo real para isso acontecer?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'abandono','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'abandono','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'abandono','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Seus relacionamentos importantes costumam ser muito intensos — você ama a pessoa profundamente, mas de repente pode se decepcionar tão fundo que parece outra pessoa?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'idealiz','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'idealiz','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'idealiz','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você já se sentiu sem saber muito bem quem você é — seus valores, o que quer da vida — como se isso mudasse dependendo das pessoas com quem você está?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'identidade','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'identidade','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'identidade','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Costuma sentir que algo sempre falta por dentro — como um buraco que não fecha — independente das coisas boas que estejam acontecendo na sua vida?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'vazio','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'vazio','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'vazio','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já perdeu o controle da raiva de um jeito que te surpreendeu — uma reação desproporcional ao que aconteceu?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'raiva_bpd','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'raiva_bpd','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'raiva_bpd','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Com frequência você sente que se dedica muito mais às pessoas do que elas se dedicam a você — e isso te deixa decepcionado(a)?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'narcisista','Sim, frequentemente',2)">Sim, frequentemente</button>
+      <button class="opt" onclick="r(this,'narcisista','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'narcisista','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você costuma se sentir desconfortável quando não é o centro das atenções — e tende a ser muito expressivo(a) emocionalmente para atrair atenção?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'histrionico','Sim, reconheço',2)">Sim, reconheço</button>
+      <button class="opt" onclick="r(this,'histrionico','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'histrionico','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já fez coisas que sabe que machucaram outras pessoas e não sentiu culpa por isso — seja agindo por impulso ou conscientemente?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'antissocial','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'antissocial','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'antissocial','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você prefere ficar sozinho(a) na maior parte do tempo, raramente sente vontade de estar com outras pessoas — e isso não te incomoda, é simplesmente como você é?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'esquizoide','Sim, reconheço',2)">Sim, reconheço</button>
+      <button class="opt" onclick="r(this,'esquizoide','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'esquizoide','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você evita situações com pessoas por medo de ser julgado(a) ou rejeitado(a) — mesmo querendo participar — e costuma se sentir menos capaz ou menos valioso(a) que os outros?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'evitativo','Sim, é um padrão',2)">Sim, é um padrão</button>
+      <button class="opt" onclick="r(this,'evitativo','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'evitativo','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Tem muita dificuldade em decidir sozinho(a), precisa que outros aprovem suas escolhas e sente muito medo de ficar sem apoio de alguém?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'dependente','Sim, reconheço muito',2)">Sim, reconheço muito</button>
+      <button class="opt" onclick="r(this,'dependente','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'dependente','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você tem padrões muito altos de como as coisas devem ser feitas — e já aconteceu de isso atrapalhar seu trabalho, suas relações ou seus projetos porque outros não fazem do jeito que você considera certo?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tpoc','Sim, reconheço muito',2)">Sim, reconheço muito</button>
+      <button class="opt" onclick="r(this,'tpoc','Um pouco',1)">Um pouco</button>
+      <button class="opt" onclick="r(this,'tpoc','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <span class="open-label">Quer contar algo sobre como você funciona nos relacionamentos?</span>
+  <textarea class="open-txt" id="obs_rel" placeholder="Opcional..."></textarea>
+</div>
+
+<!-- 10. SOMATOFORME / FÍSICO -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">◎</div><span class="sec-title">Corpo e sintomas físicos</span><span class="sec-hint">relação entre emoções e corpo</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Você tem sintomas físicos frequentes — dores, cansaço, problemas no estômago — mas os médicos dizem que os exames estão normais ou não acham uma causa clara?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'somatico','Sim, com frequência',2)">Sim, com frequência</button>
+      <button class="opt" onclick="r(this,'somatico','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'somatico','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já teve episódios em que perdeu força, teve tremores, ficou paralisado(a) ou com dificuldade de enxergar — e os médicos fizeram exames mas não encontraram nenhuma causa física?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'conversivo','Sim',2)">Sim</button>
+      <button class="opt" onclick="r(this,'conversivo','Não tenho certeza',1)">Não tenho certeza</button>
+      <button class="opt" onclick="r(this,'conversivo','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Você sente um cansaço muito intenso e persistente — que não melhora com descanso e interfere significativamente na sua vida?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'fadiga','Sim, persistente e intenso',2)">Sim, é constante e atrapalha minha vida</button>
+      <button class="opt" onclick="r(this,'fadiga','Às vezes',1)">Às vezes</button>
+      <button class="opt" onclick="r(this,'fadiga','Não',0)">Não</button>
+    </div>
+  </div>
+</div>
+
+<!-- 11. IDEAÇÃO / RISCO -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">!</div><span class="sec-title">Pensamentos sobre a vida</span><span class="sec-hint">área sensível — responda com calma</span></div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Já passou por fases em que desejava não estar aqui — não necessariamente com um plano, mas com vontade de desaparecer ou não acordar?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ideacao_passiva','Sim, sinto atualmente',3)">Sim, atualmente</button>
+      <button class="opt" onclick="r(this,'ideacao_passiva','Já senti, não mais',2)">Já senti, não mais</button>
+      <button class="opt" onclick="r(this,'ideacao_passiva','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Já pensou em se machucar de forma intencional ou teve alguma ideia de como isso poderia acontecer?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'ideacao_ativa','Sim, atualmente',3)">Sim, atualmente</button>
+      <button class="opt" onclick="r(this,'ideacao_ativa','Já pensei no passado',2)">Já pensei no passado</button>
+      <button class="opt" onclick="r(this,'ideacao_ativa','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Já tentou se machucar gravemente ou tentou suicídio?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'tentativa','Sim',3); document.getElementById('tent-quando').style.display='block'">Sim</button>
+      <button class="opt" onclick="r(this,'tentativa','Prefiro não responder',2); document.getElementById('tent-quando').style.display='block'">Prefiro não responder</button>
+      <button class="opt" onclick="r(this,'tentativa','Não',0); document.getElementById('tent-quando').style.display='none'">Não</button>
+    </div>
+    <div id="tent-quando" style="display:none;margin-top:10px;">
+      <input type="text" class="med-input" style="width:100%" id="tentativa_quando" placeholder="Quando foi? (ex: há 2 anos, em 2020...)">
+    </div>
+  </div>
+
+  <div class="qcard flagged">
+    <div class="qtext">Já se machucou fisicamente de propósito — cortes, queimaduras — para aliviar uma emoção muito intensa?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'automutilacao','Sim, atualmente',3)">Sim, atualmente</button>
+      <button class="opt" onclick="r(this,'automutilacao','Já fiz, não mais',2)">Já fiz, não mais</button>
+      <button class="opt" onclick="r(this,'automutilacao','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <span class="open-label">Se quiser dizer algo sobre esses pensamentos, este espaço é seu.</span>
+  <textarea class="open-txt" id="obs_ideacao" placeholder="Opcional — sem julgamento..."></textarea>
+</div>
+
+<!-- 12. CONTEXTO -->
+<div class="section">
+  <div class="sec-header"><div class="sec-icon">✦</div><span class="sec-title">Histórico e contexto</span><span class="sec-hint">informações importantes para o atendimento</span></div>
+
+  <div class="qcard">
+    <div class="qtext">Usa álcool ou outras substâncias com frequência — ou usa para lidar com emoções difíceis, ansiedade ou para dormir?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'substancia','Sim, atualmente',2)">Sim, atualmente</button>
+      <button class="opt" onclick="r(this,'substancia','Já usei, não mais',1)">Já usei, não mais</button>
+      <button class="opt" onclick="r(this,'substancia','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Algum familiar próximo — pais, irmãos, avós — já fez tratamento para depressão, ansiedade, uso de álcool ou outro problema de saúde mental?</div>
+    <div class="opts">
+      <button class="opt" onclick="r(this,'hist_fam','Sim',1)">Sim</button>
+      <button class="opt" onclick="r(this,'hist_fam','Não sei ao certo',1)">Não sei ao certo</button>
+      <button class="opt" onclick="r(this,'hist_fam','Não',0)">Não</button>
+    </div>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Já fez tratamento psiquiátrico ou psicológico antes? Como foi?</div>
+    <textarea class="open-txt" id="hist_tto" placeholder="Diagnósticos anteriores, medicações, o que funcionou ou não..."></textarea>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Faz uso de alguma medicação atualmente? Adicione uma por linha.</div>
+    <div id="med-lista">
+      <div class="med-grid">
+        <input type="text" class="med-input" placeholder="Nome do medicamento" id="med-nome-0">
+        <input type="text" class="med-input" placeholder="Dose (ex: 50mg)" id="med-dose-0">
+        <input type="text" class="med-input" placeholder="Há quanto tempo?" id="med-tempo-0">
+      </div>
+    </div>
+    <button type="button" class="btn-add-med" onclick="addMed()">+ Adicionar outra medicação</button>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">O que mais te incomoda agora — o que te fez buscar ajuda neste momento?</div>
+    <textarea class="open-txt" id="queixa" placeholder="Conte com suas palavras..."></textarea>
+  </div>
+
+  <div class="qcard">
+    <div class="qtext">Há algo que você quer que sua médica saiba — que não foi perguntado acima?</div>
+    <textarea class="open-txt" id="obs_livre" placeholder="Este espaço é totalmente seu..."></textarea>
+  </div>
+</div>
+
+<div style="text-align:center;margin-bottom:16px;"><button onclick="window.print()" style="background:none;border:1.5px solid var(--border);border-radius:30px;padding:10px 32px;font-family:Jost,sans-serif;font-size:13px;color:var(--muted);cursor:pointer;">🖨 Prefere imprimir e preencher à mão?</button></div>
+<div class="submit-area">
+  <button class="btn-submit" onclick="calcular()">Enviar para minha médica</button>
+  <div id="send-status"></div>
+</div>
+
+<div id="resultado">
+  <div class="res-top">
+    <h2>✓ Respostas recebidas</h2>
+    <p>Obrigado por responder com atenção. Suas respostas foram enviadas com segurança para sua médica, que irá analisá-las antes da sua consulta.</p>
+  </div>
+</div>
+
+<div class="footer">Dra. Camila Lino · CRM 274280 SP · Psiquiatria<br>Questionário de saúde mental · Uso clínico confidencial</div>
+</div>
+
+<script>
+const R={};let respondidas=0,medCount=1;
+function r(btn,key,val,score){
+  const prev=R[key];
+  btn.closest('.opts').querySelectorAll('.opt').forEach(b=>b.classList.remove('s-sim','s-nao','s-as'));
+  if(score===0)btn.classList.add('s-nao');
+  else if(score>=2)btn.classList.add('s-sim');
+  else btn.classList.add('s-as');
+  if(!prev)respondidas++;
+  R[key]={val,score};
+  const pct=Math.min(100,Math.round((respondidas/60)*100));
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('prog-label').textContent=respondidas+' respondidas';
+}
+function g(id){return document.getElementById(id)?.value?.trim()||'';}
+function s(key){return R[key]?.score||0;}
+function v(key){return R[key]?.val||'';}
+function addMed(){
+  const lista=document.getElementById('med-lista');
+  const idx=medCount++;
+  const div=document.createElement('div');
+  div.className='med-grid';
+  div.innerHTML=`<input type="text" class="med-input" placeholder="Nome do medicamento" id="med-nome-${idx}"><input type="text" class="med-input" placeholder="Dose (ex: 50mg)" id="med-dose-${idx}"><input type="text" class="med-input" placeholder="Há quanto tempo?" id="med-tempo-${idx}">`;
+  lista.appendChild(div);
+}
+function getMedicacoes(){
+  const linhas=[];
+  for(let i=0;i<medCount;i++){
+    const nome=document.getElementById('med-nome-'+i)?.value?.trim();
+    const dose=document.getElementById('med-dose-'+i)?.value?.trim();
+    const tempo=document.getElementById('med-tempo-'+i)?.value?.trim();
+    if(nome)linhas.push(nome+(dose?' — '+dose:'')+(tempo?' (há '+tempo+')':''));
+  }
+  return linhas.length?linhas.join('\n'):'-';
+}
+
+function calcular(){
+  const nome=g('nome')||'Não informado';
+  const nasc=g('nasc')||'Não informado';
+  const alertas=[],atencoes=[],diag={};
+
+  // ══ HUMOR ══
+
+  // Distimia vs Depressão Maior
+  const dep_cronico = s('dep_duracao')>=2;
+  const dep_epis = s('dep_epis')>=2 || s('anedonia')>=2;
+  if(dep_cronico) { atencoes.push('Transtorno Depressivo Persistente (Distimia) — humor baixo crônico há anos, quase permanente, sem episódios claros. Diferente de episódio depressivo maior.'); diag.distimia=true; }
+  else if(dep_epis) { atencoes.push('Episódio Depressivo Maior — humor rebaixado episódico por semanas/meses com anedonia.'); diag.depressao=true; }
+
+  // Depressão Atípica
+  if(dep_epis && s('dep_atipica')>=2) { atencoes.push('Características de Depressão Atípica — reatividade do humor preservada (melhora com eventos positivos). Avaliar na entrevista.'); diag.dep_atipica=true; }
+
+  // TDPM
+  if(s('tdpm')>=2) { atencoes.push('Transtorno Disfórico Pré-Menstrual (TDPM) — sintomas de humor e irritabilidade claramente ligados ao ciclo menstrual. Confirmar com diário de sintomas.'); diag.tdpm=true; }
+
+  // Bipolar I vs II vs Ciclotimia — DIFERENCIAL CENTRAL
+  const hipo_real = s('hipo_prod')>=2 && s('sono_qual')>=2 && s('hipo_obs')>=2;
+  const hipo_possivel = s('hipo_prod')>=2 || (s('hipo_risco')>=2 && s('sono_reduzido')>=2);
+  const mania_grave = s('mania_grave')>=2;
+  const tem_depressao = dep_epis || dep_cronico;
+
+  if(mania_grave && hipo_real) {
+    alertas.push('🔴 Rastreio POSITIVO para BIPOLAR TIPO I — episódio maníaco com grandiosidade/consequências graves + características hipomaníacas confirmadas. Sono subjetivamente desnecessário. Aplicar MDQ.');
+    diag.bip1=true;
+  } else if(hipo_real && tem_depressao) {
+    alertas.push('🟡 Rastreio POSITIVO para BIPOLAR TIPO II — hipomaníaco real (diferente do basal, observado por outros, sono subjetivamente desnecessário) + depressão. SEM grandiosidade grave. Aplicar MDQ.');
+    diag.bip2=true;
+  } else if(hipo_possivel && tem_depressao) {
+    atencoes.push('Espectro bipolar provável — alta produtividade episódica + sono reduzido + depressão. Não preenche critérios completos de hipomania ainda. Investigar com MDQ e anamnese detalhada.');
+    diag.bip_esp=true;
+  } else if(s('ciclotimia')>=2) {
+    atencoes.push('Ciclotimia — oscilações crônicas de humor sem episódios completos de mania/depressão. Avaliar se preenche critérios (2+ anos de oscilações subclínicas).');
+    diag.ciclotimia=true;
+  }
+
+  if(s('irritab')>=2 && !diag.bip1 && !diag.bip2) {
+    atencoes.push('Irritabilidade episódica diferente do basal — pode representar fase mista ou hipomaníaca irritável (Bipolar II). Investigar contexto e duração.');
+  }
+
+  // ══ ANSIEDADE ══
+  if(s('tag')>=2 && s('tensao')>=2) { atencoes.push('TAG — preocupação excessiva generalizada com tensão somática crônica.'); diag.tag=true; }
+  else if(s('tag')>=2) { atencoes.push('Sintomas de TAG — preocupação excessiva. Avaliar impacto funcional.'); }
+
+  if(s('panico')>=2) {
+    if(s('agorafobia')>=2) { atencoes.push('Transtorno de Pânico com Agorafobia — crises recorrentes + evitação de lugares por medo de novas crises.'); diag.panico_agora=true; }
+    else { atencoes.push('Transtorno de Pânico — crises recorrentes sem agorafobia significativa.'); diag.panico=true; }
+  } else if(s('agorafobia')>=2) {
+    atencoes.push('Agorafobia — evitação de lugares/situações mesmo sem histórico de pânico típico.');
+  }
+
+  if(s('fobia_soc')>=2) { atencoes.push('Fobia Social / Transtorno de Ansiedade Social — evitação ativa de situações sociais por ansiedade.'); diag.fobia_soc=true; }
+  if(s('fobia_esp')>=2) { atencoes.push('Fobia Específica presente — investigar qual (altura, agulhas, animais, etc.) e impacto funcional.'); }
+  if(s('ansiedade_saude')>=2) { atencoes.push('Ansiedade de Saúde / Transtorno de Ansiedade de Doença — preocupação persistente com doença grave apesar de exames normais.'); }
+
+  // ══ TOC / IMPULSOS ══
+  if(s('obsessao')>=2 && s('compulsao')>=2) { alertas.push('Rastreio POSITIVO para TOC — obsessões + compulsões com sofrimento. Investigar subtipo (contaminação, simetria, pensamentos proibidos).'); diag.toc=true; }
+  else if(s('obsessao')>=2 || s('compulsao')>=2) { atencoes.push('Sintomas obsessivo-compulsivos parciais — avaliar impacto funcional e sofrimento.'); }
+  if(s('hoarding')>=2) { atencoes.push('Transtorno de Acumulação (Hoarding) — dificuldade de descartar com impacto funcional.'); }
+  if(s('bfrb')>=2) { atencoes.push('Comportamento Repetitivo Focado no Corpo (BFRB) — tricotilomania ou escoriação. Investigar frequência e sofrimento.'); }
+  if(s('tei')>=2) { atencoes.push('Transtorno Explosivo Intermitente — raiva desproporcional e episódica. Diferencial com TPB, Bipolar e TDAH.'); }
+  if(s('impulso')>=2) { atencoes.push('Transtorno do Controle de Impulsos — comportamentos compulsivos (compras, jogos, internet, sexo) com consequências concretas.'); }
+
+  // ══ TRAUMA / DISSOCIAÇÃO ══
+  const ptsd_core = s('ptsd_reexp')>=2 && s('ptsd_evit')>=2;
+  const trauma_complexo = s('trauma_abuso')>=2 || s('fam_instavel')>=2;
+
+  if(ptsd_core && trauma_complexo) { alertas.push('🔴 Rastreio POSITIVO para TEPT COMPLEXO (CPTSD) — reexperiência + evitação + trauma precoce/prolongado. Investigar dissociação e padrões de apego.'); diag.cptsd=true; }
+  else if(ptsd_core) { alertas.push('Rastreio POSITIVO para TEPT — reexperiência + evitação/hipervigilância. Investigar critérios completos.'); diag.ptsd=true; }
+  else if(s('ptsd_reexp')>=2 || s('ptsd_evit')>=2) { atencoes.push('Sintomas de trauma presentes — investigar TEPT ou TEPT parcial na entrevista.'); }
+
+  if(trauma_complexo && !ptsd_core) { atencoes.push('Histórico de trauma precoce/prolongado — investigar impacto nos padrões de apego, identidade e regulação emocional.'); }
+
+  if(s('dissoc')>=2 && s('amnesia_dis')>=2) { alertas.push('Sintomas dissociativos significativos — despersonalização/desrealização + amnesia. Investigar TDI ou Transtorno Dissociativo.'); diag.dissoc=true; }
+  else if(s('dissoc')>=2) { atencoes.push('Despersonalização/Desrealização — avaliar frequência e contexto (pode ser secundário a ansiedade, TEPT ou dissociativo primário).'); }
+
+  if(s('ajuste')>=1 && !diag.ptsd && !diag.cptsd) { atencoes.push('Dificuldade adaptativa a mudanças — avaliar Transtorno de Ajustamento se vinculado a evento específico.'); }
+
+  // ══ TDAH / TEA / AH ══
+
+  // TDAH — diferencial desatento vs combinado
+  const tdah_des = s('desatencao')>=2 && s('organizacao')>=2 && s('tdah_inicio')>=2;
+  const tdah_hip = s('hiperativ')>=2;
+  if(tdah_des && tdah_hip) { atencoes.push('TDAH Tipo Combinado — desatenção + hiperatividade/impulsividade desde a infância. Investigar com ASRS.'); diag.tdah_comb=true; }
+  else if(tdah_des) { atencoes.push('TDAH Predominantemente Desatento — desatenção desde a infância sem hiperatividade motora proeminente. Investigar com ASRS.'); diag.tdah_des=true; }
+  else if(tdah_hip && s('tdah_inicio')>=2) { atencoes.push('Componente hiperativo/impulsivo desde a infância — avaliar TDAH tipo hiperativo.'); }
+
+  // TEA — score robusto
+  const tea_score = s('tea_mascara') + s('tea_cansaco') + s('tea_rotina') + s('tea_sensorial') + s('tea_interesse') + s('ah_pares');
+  if(tea_score>=9) { alertas.push('🔴 Rastreio fortemente POSITIVO para TEA — mascaramento social, esgotamento social, rotina, sensorialidade, interesses restritos e dificuldade com pares: múltiplos domínios. Encaminhar para avaliação neuropsicológica (ADOS-2/ADI-R).'); diag.tea=true; }
+  else if(tea_score>=6) { atencoes.push('Perfil compatível com TEA — múltiplas características presentes. Considerar rastreio formal (RAADS-R, AQ).'); diag.tea_poss=true; }
+  else if(tea_score>=3) { atencoes.push('Algumas características do espectro autista — avaliar relevância clínica no contexto do quadro geral.'); }
+
+  // AH — separado de TEA
+  const ah_score = s('ah_aprendizado') + s('ah_conexoes') + s('ah_tedio') + s('ah_autoridade') + s('ah_pares');
+  if(ah_score>=8) { atencoes.push('Perfil fortemente compatível com Altas Habilidades/Superdotação — aprendizado acelerado, pensamento não-linear, tédio com rotina, questionamento de autoridade, dificuldade com pares. Considerar avaliação neuropsicológica (WISC/WAIS).'); diag.ah=true; }
+  else if(ah_score>=5) { atencoes.push('Características sugestivas de Altas Habilidades — investigar no contexto clínico (pode coexistir com TDAH ou TEA — dupla excepcionalidade).'); }
+
+  // ══ ALIMENTAÇÃO ══
+  const restricao_imagem = s('restricao')>=2 && v('restricao_motivo').includes('imagem');
+  const restricao_sensorial = s('restricao')>=2 && v('restricao_motivo').includes('Textura');
+
+  if(restricao_imagem) { alertas.push('🔴 Histórico de Anorexia Nervosa — restrição grave por medo de engordar/imagem corporal. Avaliar estado nutricional atual.'); diag.anorexia=true; }
+  if(restricao_sensorial) { atencoes.push('ARFID (Avoidant/Restrictive Food Intake Disorder) — restrição alimentar por sensorialidade/rotina, sem motivação de imagem corporal. Comum no TEA.'); diag.arfid=true; }
+  if(s('bulimia')>=2) { alertas.push('Histórico de Bulimia Nervosa — episódios de compulsão + comportamentos purgativos.'); diag.bulimia=true; }
+  if(s('compulsao_alim')>=2) { atencoes.push('Transtorno de Compulsão Alimentar — episódios de compulsão sem comportamentos purgativos.'); }
+  if(s('ortorexia')>=2) { atencoes.push('Ortorexia — controle rígido da qualidade alimentar com impacto social/funcional.'); }
+
+  // ══ SONO ══
+  if(s('sono_geral')>=2 && s('insonia_ini')>=2) { atencoes.push('Insônia Crônica — dificuldade de início e/ou manutenção do sono com impacto funcional. Investigar causas primárias e secundárias.'); }
+  if(s('spi')>=2) { atencoes.push('Síndrome das Pernas Inquietas — desconforto noturno com necessidade de mover as pernas. Investigar ferritina e causas secundárias.'); }
+
+  // ══ PERCEPÇÃO / PSICOSE ══
+  if(s('alucinacao')>=2) { alertas.push('🚨 Experiências alucinatórias relatadas — investigar psicose, esquizofrenia ou transtorno esquizoafetivo ativamente.'); diag.psicose=true; }
+  if(s('referencia')>=2) { atencoes.push('Ideias de referência — monitorar no contexto clínico (pode ser psicótico, paranoide ou ansiedade social intensa).'); }
+  if(s('esquizotipico')>=2) { atencoes.push('Crenças/experiências incomuns fora do contexto religioso — investigar espectro esquizotípico.'); }
+
+  // ══ PERSONALIDADE ══
+  // BPD — diferencial cuidadoso com Bipolar II
+  const bpd_score = s('abandono') + s('idealiz') + s('identidade') + s('vazio') + s('raiva_bpd') + (s('automutilacao')>=2?2:0);
+  if(bpd_score>=8) { alertas.push('🔴 Rastreio POSITIVO para TPB (Borderline) — múltiplos critérios: medo de abandono, instabilidade relacional, difusão de identidade, vazio, raiva. DIFERENCIAL IMPORTANTE com Bipolar II: no TPB as oscilações são reativas a eventos interpessoais e intradiárias; no Bipolar II são episódicas e independentes de gatilho.'); diag.bpd=true; }
+  else if(bpd_score>=4) { atencoes.push('Traços borderline — instabilidade emocional e relacional. Investigar critérios de TPB vs. Bipolar II na entrevista.'); }
+
+  if(s('narcisista')>=2) { atencoes.push('Traços narcisistas — expectativa de reciprocidade elevada, sensação de não ser correspondido. Investigar grandiosidade, empatia e sensibilidade à crítica.'); }
+  if(s('histrionico')>=2) { atencoes.push('Traços histriônicos — busca de atenção, emocionalidade expressiva.'); }
+  if(s('antissocial')>=2) { alertas.push('Traços antissociais — desrespeito a normas e aos direitos alheios sem remorso. Investigar histórico de conduta.'); }
+  if(s('paranoide')>=2) { atencoes.push('Traços paranoides — desconfiança pervasiva. Diferenciar de TEPT, psicose e ansiedade social.'); }
+  if(s('esquizoide')>=2) { atencoes.push('Traços esquizoides — isolamento social e distância afetiva egossintônicos. Diferenciar de TEA e depressão.'); }
+  if(s('evitativo')>=2) { atencoes.push('Traços evitativos — esquiva social por medo de crítica, inferioridade. Diferencial com Fobia Social: no evitativo é pervasivo e egossintônico.'); }
+  if(s('dependente')>=2) { atencoes.push('Traços dependentes — necessidade excessiva de suporte e aprovação. Investigar padrão de apego.'); }
+  if(s('tpoc')>=2) { atencoes.push('Traços obsessivo-compulsivos de personalidade (TPOC) — perfeccionismo rígido, inflexibilidade. DIFERENCIAR de TOC: TPOC é egossintônico, TOC é egodistônico.'); }
+
+  // ══ SOMATOFORME ══
+  if(s('somatico')>=2) { atencoes.push('Transtorno de Sintomas Somáticos — sintomas físicos sem causa orgânica adequada com sofrimento desproporcional.'); }
+  if(s('conversivo')>=2) { alertas.push('Transtorno Conversivo / Funcional Neurológico — sintomas neurológicos sem causa orgânica. Investigar ativamente.'); }
+  if(s('fadiga')>=2) { atencoes.push('Fadiga persistente intensa — investigar Síndrome de Fadiga Crônica / Encefalomielite Miálgica, além de causas psiquiátricas e clínicas.'); }
+
+  // ══ RISCO ══
+  if(s('tentativa')>=3) alertas.push('🚨 HISTÓRICO DE TENTATIVA DE SUICÍDIO — avaliação de risco obrigatória na primeira consulta.' + (g('tentativa_quando')?' Quando: '+g('tentativa_quando'):''));
+  if(s('ideacao_ativa')>=3) alertas.push('🚨 IDEAÇÃO SUICIDA ATIVA COM PLANO — avaliação de risco imediata.');
+  else if(s('ideacao_ativa')>=2) alertas.push('Histórico de ideação ativa — avaliar risco residual e plano de segurança.');
+  if(s('ideacao_passiva')>=3) alertas.push('🚨 IDEAÇÃO PASSIVA DE MORTE ATUAL — prioridade na consulta.');
+  else if(s('ideacao_passiva')>=2) atencoes.push('Histórico de ideação passiva — explorar estado atual e fatores de proteção.');
+  if(s('automutilacao')>=2) alertas.push('Automutilação relatada — explorar função, frequência, contexto e grau de risco.');
+
+  // ══ SUBSTÂNCIAS ══
+  if(s('substancia')>=2) atencoes.push('Uso ativo de substâncias — investigar padrão, frequência e função (regulação emocional?).');
+
+  // ══ RESUMO CLÍNICO ══
+  const hipoteses=[], suspeitas=[];
+  if(diag.bip1) hipoteses.push('Transtorno Bipolar Tipo I');
+  if(diag.bip2) hipoteses.push('Transtorno Bipolar Tipo II');
+  if(diag.bpd) hipoteses.push('Transtorno de Personalidade Borderline (TPB)');
+  if(diag.cptsd) hipoteses.push('TEPT Complexo (CPTSD)');
+  if(diag.ptsd) hipoteses.push('TEPT');
+  if(diag.toc) hipoteses.push('TOC');
+  if(diag.psicose) hipoteses.push('Espectro Psicótico — investigar ativamente');
+  if(diag.anorexia) hipoteses.push('Anorexia Nervosa');
+  if(diag.bulimia) hipoteses.push('Bulimia Nervosa');
+  if(diag.dissoc) hipoteses.push('Transtorno Dissociativo');
+  if(diag.conversivo) hipoteses.push('Transtorno Conversivo');
+  if(diag.antissocial) hipoteses.push('Traços Antissociais');
+
+  if(diag.tea) suspeitas.push('TEA (encaminhar avaliação neuropsicológica)');
+  if(diag.tea_poss) suspeitas.push('TEA possível (rastreio formal recomendado)');
+  if(diag.tdah_comb) suspeitas.push('TDAH Combinado');
+  if(diag.tdah_des) suspeitas.push('TDAH Desatento');
+  if(diag.ah) suspeitas.push('Altas Habilidades/Superdotação');
+  if(diag.distimia) suspeitas.push('Distimia / TDP');
+  if(diag.depressao) suspeitas.push('Episódio Depressivo Maior');
+  if(diag.dep_atipica) suspeitas.push('Depressão Atípica');
+  if(diag.tdpm) suspeitas.push('TDPM');
+  if(diag.bip_esp) suspeitas.push('Espectro Bipolar (investigar)');
+  if(diag.ciclotimia) suspeitas.push('Ciclotimia');
+  if(diag.tag) suspeitas.push('TAG');
+  if(diag.panico || diag.panico_agora) suspeitas.push(diag.panico_agora?'Transtorno de Pânico com Agorafobia':'Transtorno de Pânico');
+  if(diag.fobia_soc) suspeitas.push('Fobia Social');
+  if(diag.arfid) suspeitas.push('ARFID');
+  if(diag.substancia) suspeitas.push('Uso de Substâncias');
+
+  let resumo = '';
+  if(hipoteses.length) resumo += 'HIPÓTESES DIAGNÓSTICAS PRINCIPAIS\n(rastreio positivo — investigar ativamente)\n' + hipoteses.map(h=>'→ '+h).join('\n');
+  if(suspeitas.length) { if(resumo)resumo+='\n\n'; resumo += 'SUSPEITAS / PONTOS A INVESTIGAR\n' + suspeitas.map(s=>'• '+s).join('\n'); }
+  if(!hipoteses.length && !suspeitas.length) resumo = 'Sem hipóteses diagnósticas de alto risco identificadas.';
+
+  const linhas = Object.entries(R).map(([k,v])=>`${k}: "${v.val}" (score ${v.score})`).join('\n');
+  const NL='\n';
+  const SEP='══════════════════════════════════';
+  const corpo=[
+    'RASTREIO PSIQUIÁTRICO INICIAL',
+    'Data: '+new Date().toLocaleDateString('pt-BR'),
+    'Paciente: '+nome+' | Nasc.: '+nasc,
+    '',
+    SEP,'RESUMO CLÍNICO',SEP,
+    resumo,
+    '',
+    SEP,'ALERTAS CLÍNICOS',SEP,
+    alertas.length?alertas.join(NL):'Nenhum',
+    '',
+    SEP,'PONTOS DE ATENÇÃO',SEP,
+    atencoes.length?atencoes.join(NL):'Nenhum',
+    '',
+    SEP,'NUANCES E OBSERVAÇÕES LEVES',SEP,
+    nuances.length?nuances.join(NL):'Sem observações adicionais.',
+    '',
+    SEP,'CAMPOS ABERTOS',SEP,
+    'Humor: '+(g('obs_humor')||'-'),
+    'Sono: '+(g('obs_sono')||'-'),
+    'Trauma: '+(g('obs_trauma')||'-'),
+    'Alimentação: '+(g('obs_alim')||'-'),
+    'Percepção: '+(g('obs_percepcao')||'-'),
+    'Relacionamentos: '+(g('obs_rel')||'-'),
+    'Ideação: '+(g('obs_ideacao')||'-'),
+    'Histórico tratamento: '+(g('hist_tto')||'-'),
+    'Medicações: '+getMedicacoes(),
+    'Queixa principal: '+(g('queixa')||'-'),
+    'Observações livres: '+(g('obs_livre')||'-'),
+    '',
+    SEP,'RESPOSTAS POR SEÇÃO',SEP,
+    resp
+  ].join(NL);
+
+  document.getElementById('resultado').classList.add('show');
+  document.getElementById('resultado').scrollIntoView({behavior:'smooth'});
+
+  // Gera PDF das respostas
+  function gerarPDF(){
+    try{
+      var jsPDF=window.jspdf.jsPDF;
+      var doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+      var ML=12,PW=186,y=14;
+
+      function nl(txt,bold,sz){
+        doc.setFontSize(sz||8.5);
+        doc.setFont('helvetica',bold?'bold':'normal');
+        var lines=doc.splitTextToSize(String(txt||'-'),PW);
+        for(var i=0;i<lines.length;i++){
+          if(y>282){doc.addPage();y=14;}
+          doc.text(lines[i],ML,y);y+=5;
+        }
+      }
+      function sec(t){
+        y+=2;if(y>276){doc.addPage();y=14;}
+        doc.setFillColor(30,30,30);doc.rect(ML,y-3.5,PW,6.5,'F');
+        doc.setTextColor(255,255,255);doc.setFontSize(8.5);doc.setFont('helvetica','bold');
+        doc.text(t,ML+2,y+0.5);doc.setTextColor(30,30,30);y+=7;
+      }
+
+      // Header
+      doc.setFillColor(30,30,30);doc.rect(0,0,210,20,'F');
+      doc.setTextColor(255,255,255);
+      doc.setFontSize(12);doc.setFont('helvetica','bold');
+      doc.text('RASTREIO PSIQUIATRICO INICIAL',ML,9);
+      doc.setFontSize(7.5);doc.setFont('helvetica','normal');
+      doc.text('Dra. Camila Lino  CRM 274280 SP  Psiquiatria',ML,15);
+      doc.setTextColor(30,30,30);y=26;
+
+      nl('Paciente: '+nome,true,10);
+      nl('Nascimento: '+nasc);
+      nl('Data: '+new Date().toLocaleDateString('pt-BR'));
+      y+=2;
+
+      // Resumo
+      sec('RESUMO CLINICO');
+      resumo.split(String.fromCharCode(10)).forEach(function(l){nl(l,l.charAt(0)==='→'||l.charAt(0)==='•');});
+      y+=2;
+
+      // Alertas
+      if(alertas.length){sec('ALERTAS CLINICOS');alertas.forEach(function(a){nl('! '+a);y+=0.5;});y+=2;}
+
+      // Atencoes
+      if(atencoes.length){sec('PONTOS DE ATENCAO');atencoes.forEach(function(a){nl('- '+a);y+=0.5;});y+=2;}
+
+      // Respostas por seção
+      sec('RESPOSTAS POR SECAO');
+      var secoes={
+        'Humor e Energia':{dep_epis:'Episodio depressivo',dep_duracao:'Padrao humor',anedonia:'Perda interesse',hipo_prod:'Fases produtividade',sono_qual:'Sono nessas fases',hipo_obs:'Diferenca do normal',mania_grave:'Incrivel/consequencias',hipo_risco:'Decisoes impulsivas',hipo_crash:'Queda pos rendimento',ciclotimia:'Oscilacoes cronicas',irritab:'Irritabilidade',tdpm:'Variacao ciclo',dep_atipica:'Reatividade humor'},
+        'Ansiedade':{tag:'Preocupacao excessiva',panico:'Crises panico',agorafobia:'Evitacao lugares',fobia_soc:'Ansiedade social',fobia_esp:'Fobia especifica',ansiedade_saude:'Ansiedade saude',tensao:'Tensao corporal'},
+        'TOC e Impulsos':{obsessao:'Pensamentos intrusivos',compulsao:'Compulsoes',hoarding:'Acumulacao',bfrb:'Comportamento repetitivo',tei:'Raiva explosiva',impulso:'Controle impulsos'},
+        'Trauma e Dissociacao':{ptsd_reexp:'Reexperiencia trauma',ptsd_evit:'Evitacao/alerta',trauma_abuso:'Abuso infancia',fam_instavel:'Familia instavel',dissoc:'Despersonalizacao',amnesia_dis:'Amnesia',ajuste:'Dificuldade adaptacao'},
+        'Atencao e Neurodesenv':{desatencao:'Desatencao',organizacao:'Organizacao',hiperativ:'Inquietacao',tdah_inicio:'Inicio sintomas',ah_aprendizado:'Aprendizado acelerado',ah_conexoes:'Pensamento nao-linear',ah_tedio:'Tedio com rotina',ah_autoridade:'Questiona regras',tea_mascara:'Mascara social',tea_cansaco:'Esgotamento social',tea_rotina:'Rotina previsivel',tea_sensorial:'Sensibilidade sensorial',ah_pares:'Dificuldade com pares',tea_interesse:'Interesses especificos'},
+        'Alimentacao':{restricao:'Restricao alimentar',restricao_motivo:'Motivo restricao',bulimia:'Compulsao purgacao',compulsao_alim:'Compulsao sem purgacao',ortorexia:'Controle qualidade'},
+        'Sono':{sono_geral:'Qualidade geral',insonia_ini:'Insonia inicio',sono_reduzido:'Sono reduzido',hipersonia:'Hipersonia',spi:'Pernas inquietas'},
+        'Percepcoes':{alucinacao:'Alucinacoes',referencia:'Ideias referencia',esquizotipico:'Crencas incomuns',paranoide:'Desconfianca'},
+        'Relacionamentos':{abandono:'Medo abandono',idealiz:'Idealizacao/decepcao',identidade:'Identidade difusa',vazio:'Vazio interno',raiva_bpd:'Raiva desproporcional',narcisista:'Expectativa reciprocidade',histrionico:'Busca atencao',antissocial:'Desrespeito regras',esquizoide:'Isolamento',evitativo:'Evitacao critica',dependente:'Necessidade aprovacao',tpoc:'Perfeccionismo'},
+        'Corpo':{somatico:'Sintomas sem causa',conversivo:'Sintomas neurologicos',fadiga:'Fadiga persistente'},
+        'Ideacao e Risco':{ideacao_passiva:'Ideacao passiva',ideacao_ativa:'Ideacao ativa',tentativa:'Tentativa previa',automutilacao:'Automutilacao'},
+        'Contexto':{substancia:'Uso substancias',hist_fam:'Historico familiar'}
+      };
+      var sl=function(sc){return sc===0?'NAO':sc===1?'AS VEZES':sc===2?'SIM':'CRITICO';};
+      Object.keys(secoes).forEach(function(sec_name){
+        var campos=secoes[sec_name];var bloco='';var tem=false;
+        Object.keys(campos).forEach(function(key){
+          if(R[key]){bloco+=campos[key]+': '+v(key)+' ['+sl(s(key))+']'+String.fromCharCode(10);tem=true;}
+        });
+        if(tem){
+          y+=1;if(y>276){doc.addPage();y=14;}
+          doc.setFont('helvetica','bold');doc.setFontSize(8);
+          if(y>278){doc.addPage();y=14;}
+          doc.text(sec_name.toUpperCase(),ML,y);y+=4;
+          bloco.split(String.fromCharCode(10)).forEach(function(l){if(l)nl('  '+l);});
+          y+=1;
+        }
+      });
+
+      // Campos abertos
+      sec('CAMPOS ABERTOS');
+      var campos_abertos=[
+        ['Humor',g('obs_humor')],['Sono',g('obs_sono')],['Trauma',g('obs_trauma')],
+        ['Alimentacao',g('obs_alim')],['Percepcao',g('obs_percepcao')],['Relacionamentos',g('obs_rel')],
+        ['Ideacao',g('obs_ideacao')],['Hist. tratamento',g('hist_tto')],['Medicacoes',getMedicacoes()],
+        ['Queixa principal',g('queixa')],['Observacoes',g('obs_livre')]
+      ];
+      campos_abertos.forEach(function(par){
+        if(par[1]&&par[1]!=='-'){nl(par[0]+': '+par[1]);}
+      });
+
+      // Footer em cada página
+      var totalPages=doc.internal.getNumberOfPages();
+      for(var i=1;i<=totalPages;i++){
+        doc.setPage(i);
+        doc.setFontSize(7);doc.setFont('helvetica','normal');doc.setTextColor(150,150,150);
+        doc.text('Dra. Camila Lino  CRM 274280 SP  |  Pagina '+i+' de '+totalPages,ML,292);
+        doc.setTextColor(30,30,30);
+      }
+
+      return doc.output('datauristring').split(',')[1];
+    }catch(e){
+      console.error('PDF error:',e);
+      return null;
+    }
+  }
+
+  // Monta payload para Google Apps Script
+  var secoesDados={};
+  var mapaS={
+    'Humor e Energia':{dep_epis:'Episodio depressivo',dep_duracao:'Padrao humor',anedonia:'Perda interesse',hipo_prod:'Fases produtividade',sono_qual:'Sono nessas fases',hipo_obs:'Diferenca do normal',mania_grave:'Incrivel/consequencias',hipo_risco:'Decisoes impulsivas',hipo_crash:'Queda pos rendimento',ciclotimia:'Oscilacoes cronicas',irritab:'Irritabilidade',tdpm:'Variacao ciclo',dep_atipica:'Reatividade humor'},
+    'Ansiedade':{tag:'Preocupacao excessiva',panico:'Crises panico',agorafobia:'Evitacao lugares',fobia_soc:'Ansiedade social',fobia_esp:'Fobia especifica',ansiedade_saude:'Ansiedade saude',tensao:'Tensao corporal'},
+    'TOC e Impulsos':{obsessao:'Pensamentos intrusivos',compulsao:'Compulsoes',hoarding:'Acumulacao',bfrb:'Comportamento repetitivo',tei:'Raiva explosiva',impulso:'Controle impulsos'},
+    'Trauma e Dissociacao':{ptsd_reexp:'Reexperiencia trauma',ptsd_evit:'Evitacao alerta',trauma_abuso:'Abuso infancia',fam_instavel:'Familia instavel',dissoc:'Despersonalizacao',amnesia_dis:'Amnesia',ajuste:'Dificuldade adaptacao'},
+    'Atencao e Neurodesenv':{desatencao:'Desatencao',organizacao:'Organizacao',hiperativ:'Inquietacao',tdah_inicio:'Inicio sintomas',ah_aprendizado:'Aprendizado acelerado',ah_conexoes:'Pensamento nao-linear',ah_tedio:'Tedio rotina',ah_autoridade:'Questiona regras',tea_mascara:'Mascara social',tea_cansaco:'Esgotamento social',tea_rotina:'Rotina previsivel',tea_sensorial:'Sensibilidade sensorial',ah_pares:'Dificuldade pares',tea_interesse:'Interesses especificos'},
+    'Alimentacao':{restricao:'Restricao alimentar',restricao_motivo:'Motivo restricao',bulimia:'Compulsao purgacao',compulsao_alim:'Compulsao sem purgacao',ortorexia:'Controle qualidade'},
+    'Sono':{sono_geral:'Qualidade geral',insonia_ini:'Insonia inicio',sono_reduzido:'Sono reduzido',hipersonia:'Hipersonia',spi:'Pernas inquietas'},
+    'Percepcoes':{alucinacao:'Alucinacoes',referencia:'Ideias referencia',esquizotipico:'Crencas incomuns',paranoide:'Desconfianca'},
+    'Relacionamentos':{abandono:'Medo abandono',idealiz:'Idealizacao decepcao',identidade:'Identidade difusa',vazio:'Vazio interno',raiva_bpd:'Raiva desproporcional',narcisista:'Expectativa reciprocidade',histrionico:'Busca atencao',antissocial:'Desrespeito regras',esquizoide:'Isolamento',evitativo:'Evitacao critica',dependente:'Necessidade aprovacao',tpoc:'Perfeccionismo'},
+    'Corpo':{somatico:'Sintomas sem causa',conversivo:'Sintomas neurologicos',fadiga:'Fadiga persistente'},
+    'Ideacao e Risco':{ideacao_passiva:'Ideacao passiva',ideacao_ativa:'Ideacao ativa',tentativa:'Tentativa previa',automutilacao:'Automutilacao'},
+    'Contexto':{substancia:'Uso substancias',hist_fam:'Historico familiar'}
+  };
+  var slv=function(sc){return sc===0?'NAO':sc===1?'AS VEZES':sc===2?'SIM':'CRITICO';};
+  Object.keys(mapaS).forEach(function(secNome){
+    var campos=mapaS[secNome];var itens=[];
+    Object.keys(campos).forEach(function(key){
+      if(R[key]){itens.push({label:campos[key],valor:v(key),nivel:slv(s(key))});}
+    });
+    if(itens.length){secoesDados[secNome]=itens;}
+  });
+
+  var payload={
+    nome:nome,nasc:nasc,
+    data:new Date().toLocaleDateString('pt-BR'),
+    resumo:resumo,
+    alertas:alertas,
+    atencoes:atencoes,
+    nuances:nuances,
+    secoes:secoesDados,
+    campos_abertos:[
+      {label:'Humor',valor:g('obs_humor')||'-'},
+      {label:'Sono',valor:g('obs_sono')||'-'},
+      {label:'Trauma',valor:g('obs_trauma')||'-'},
+      {label:'Alimentacao',valor:g('obs_alim')||'-'},
+      {label:'Percepcao',valor:g('obs_percepcao')||'-'},
+      {label:'Relacionamentos',valor:g('obs_rel')||'-'},
+      {label:'Ideacao',valor:g('obs_ideacao')||'-'},
+      {label:'Historico tratamento',valor:g('hist_tto')||'-'},
+      {label:'Medicacoes',valor:getMedicacoes()},
+      {label:'Queixa principal',valor:g('queixa')||'-'},
+      {label:'Observacoes livres',valor:g('obs_livre')||'-'}
+    ]
+  };
+
+  document.getElementById('resultado').classList.add('show');
+  document.getElementById('resultado').scrollIntoView({behavior:'smooth'});
+
+  var statusEl=document.getElementById('send-status');
+  statusEl.style.display='block';statusEl.style.color='#888';
+  statusEl.textContent='Enviando para sua medica...';
+
+  fetch('https://script.google.com/macros/s/AKfycbztlA8Eu7Lelx3p5k4qX-gayoJ5O-PondWXtRmPTatMbdk6ZEBxxWZkPOb6huxPEqEK/exec',{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  }).then(function(){
+    statusEl.style.color='#5A7A60';
+    statusEl.textContent='Respostas enviadas com sucesso para sua medica.';
+  }).catch(function(){
+    statusEl.style.color='#943030';
+    statusEl.textContent='Nao foi possivel enviar. Mostre esta tela para sua medica na consulta.';
+  });
+}
+</script>
